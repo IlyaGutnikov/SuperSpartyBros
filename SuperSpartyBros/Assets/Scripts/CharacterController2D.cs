@@ -16,6 +16,7 @@ public class CharacterController2D : MonoBehaviour {
 
 	// LayerMask to determine what is considered ground for the player
 	public LayerMask whatIsGround;
+	public LayerMask whatIsPlatform;
 
 	// Transform just below feet for checking if player is grounded
 	public Transform groundCheck;
@@ -39,6 +40,7 @@ public class CharacterController2D : MonoBehaviour {
 	Rigidbody2D _rigidbody;
 	Animator _animator;
 	AudioSource _audio;
+	CircleCollider2D _collider2d;
 
 	// hold player motion in this timestep
 	float _vx;
@@ -47,6 +49,7 @@ public class CharacterController2D : MonoBehaviour {
 	// player tracking
 	bool facingRight = true;
 	bool isGrounded = false;
+	bool onPlatform = false;
 	bool isRunning = false;
 	bool _canDoubleJump = false;
 
@@ -59,6 +62,11 @@ public class CharacterController2D : MonoBehaviour {
 	void Awake () {
 		// get a reference to the components we are going to be changing and store a reference for efficiency purposes
 		_transform = GetComponent<Transform> ();
+
+		_collider2d = GetComponent<CircleCollider2D> ();
+		if (_collider2d == null) {
+			Debug.LogError("CircleCollider2D component missing from this gameobject");
+		}
 		
 		_rigidbody = GetComponent<Rigidbody2D> ();
 		if (_rigidbody==null) // if Rigidbody is missing
@@ -111,6 +119,9 @@ public class CharacterController2D : MonoBehaviour {
 		// whatIsGround layer
 		isGrounded = Physics2D.Linecast(_transform.position, groundCheck.position, whatIsGround);  
 
+		onPlatform = Physics2D.Linecast(_transform.position, groundCheck.position, whatIsPlatform);
+		//Debug.Log ("onPlatform " + onPlatform);
+
 		//allow double jump
 		if (isGrounded) {
 			_canDoubleJump = true;
@@ -132,6 +143,23 @@ public class CharacterController2D : MonoBehaviour {
 		if(CrossPlatformInputManager.GetButtonUp("Jump") && _vy>0f)
 		{
 			_vy = 0f;
+		}
+
+		//TODO сделать спуск вниз
+		if ((CrossPlatformInputManager.GetButtonDown("Down")) && (onPlatform == true) ) {
+
+			Physics2D.IgnoreLayerCollision(_playerLayer, _platformLayer,true);
+			//_rigidbody.AddForce (new Vector2 (0, -jumpForce));
+			_collider2d.isTrigger = true;
+
+			//Debug.Log ("Down pressed");
+		}
+
+		if(CrossPlatformInputManager.GetButtonUp("Down"))
+		{
+			//Debug.Log ("Down stop pressed");
+			_collider2d.isTrigger = false;
+
 		}
 
 		// Change the actual velocity on the rigidbody
