@@ -171,6 +171,19 @@ public class GameManager : MonoBehaviour {
 		StartCoroutine(LoadNextLevel());
 	}
 
+	/// <summary>
+	/// Add one external life for player
+	/// </summary>
+	public void AddExternalLife() {
+	
+		lives = PlayerPrefManager.GetLives();
+
+		lives = lives + 1;
+
+		PlayerPrefManager.SavePlayerState(score,highscore,lives);
+		refreshGUI ();
+	}
+
 	// load the nextLevel after delay
 	IEnumerator LoadNextLevel() {
 		yield return new WaitForSeconds(3.5f);
