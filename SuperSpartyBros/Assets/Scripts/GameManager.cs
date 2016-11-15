@@ -184,6 +184,19 @@ public class GameManager : MonoBehaviour {
 		refreshGUI ();
 	}
 
+	/// <summary>
+	/// Remove one life from player
+	/// </summary>
+	public void RemoveLife() {
+
+		lives = PlayerPrefManager.GetLives();
+
+		lives = lives - 1;
+
+		PlayerPrefManager.SavePlayerState(score,highscore,lives);
+		refreshGUI ();
+	}
+
 	// load the nextLevel after delay
 	IEnumerator LoadNextLevel() {
 		yield return new WaitForSeconds(3.5f);
