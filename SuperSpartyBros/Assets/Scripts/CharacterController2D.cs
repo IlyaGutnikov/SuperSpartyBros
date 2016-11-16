@@ -21,10 +21,14 @@ public class CharacterController2D : MonoBehaviour {
 	// Transform just below feet for checking if player is grounded
 	public Transform groundCheck;
 
+	public float ImmortalTime = 10f;
+
 	// player can move?
 	// we want this public so other scripts can access it but we don't want to show in editor as it might confuse designer
 	[HideInInspector]
 	public bool playerCanMove = true;
+
+	public bool isImmortal = false;
 
 	// SFXs
 	public AudioClip coinSFX;
@@ -34,6 +38,7 @@ public class CharacterController2D : MonoBehaviour {
 	public AudioClip victorySFX;
 	public AudioClip externalLifeSFX;
 	public AudioClip blankHeartSFX;
+	public AudioClip crystalSFX;
 
 	// private variables below
 
@@ -329,5 +334,34 @@ public class CharacterController2D : MonoBehaviour {
 
 	public void EnemyBounce() {
 		DoJump ();
+	}
+
+	public void GetImmortality() {
+
+		PlaySound (crystalSFX);
+
+		isImmortal = true;
+
+		playerHealth = 100000;
+
+		//TODO play green effect;
+
+		this.GetComponent<SpriteRenderer> ().color = Color.green;
+
+		StartCoroutine (Immortal());
+
+	}
+
+	// coroutine to unstun the enemy and stand back up
+	IEnumerator Immortal()
+	{
+		yield return new WaitForSeconds(ImmortalTime); 
+
+		this.GetComponent<SpriteRenderer> ().color = Color.white;
+
+		// no longer stunned
+		isImmortal = false;
+
+		playerHealth = 1;
 	}
 }
