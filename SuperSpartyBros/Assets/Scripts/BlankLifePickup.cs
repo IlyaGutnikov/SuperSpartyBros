@@ -9,6 +9,8 @@ public class BlankLifePickup : MonoBehaviour {
 	{
 		if (collision.tag == "Player")
 		{
+			collision.gameObject.GetComponent<CharacterController2D> ().GetBlankHeart ();
+
 			// if explosion prefab is provide, then instantiate it
 			if (explosion)
 			{

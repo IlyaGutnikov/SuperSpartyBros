@@ -32,6 +32,8 @@ public class CharacterController2D : MonoBehaviour {
 	public AudioClip fallSFX;
 	public AudioClip jumpSFX;
 	public AudioClip victorySFX;
+	public AudioClip externalLifeSFX;
+	public AudioClip blankHeartSFX;
 
 	// private variables below
 
@@ -273,6 +275,17 @@ public class CharacterController2D : MonoBehaviour {
 			else // otherwise, just reload the current level
 				SceneManager.LoadScene(SceneManager.GetActiveScene().name);
 		}
+	}
+
+	public void GetExternalLife() {
+
+		PlaySound (externalLifeSFX);
+	
+	}
+
+	public void GetBlankHeart() {
+	
+		PlaySound (blankHeartSFX);
 	}
 
 	public void CollectCoin(int amount) {
