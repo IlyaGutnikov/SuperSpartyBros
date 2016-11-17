@@ -95,6 +95,12 @@ public class CharacterController2D : MonoBehaviour {
 
 		// determine the platform's specified layer
 		_platformLayer = LayerMask.NameToLayer("Platform");
+
+		if (isImmortal == true) {
+
+			playerHealth = 100000;
+		
+		}
 	}
 
 	// this is where most of the player controller magic happens each game event loop
